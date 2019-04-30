@@ -23,7 +23,7 @@ namespace AspNET.MVC.Controllers
         // GET: NotificacaoIncidente
         public ActionResult Index()
         {
-            var result = _mapper.Map<ICollection<NotificacaoIncidente>, ICollection<NotificacaoIncidenteListViewModel>>
+            var result = _mapper.Map<ICollection<NotificacaoIncidente>, ICollection<NotificacaoIncidenteViewModel>>
                 (_notificacaoIncidenteService.GetAll());
             return View(result);
         }
@@ -31,7 +31,7 @@ namespace AspNET.MVC.Controllers
         // GET: NotificacaoIncidente/Details/5
         public ActionResult Details(int id)
         {
-            var result = _mapper.Map<NotificacaoIncidente, NotificacaoIncidenteListViewModel>
+            var result = _mapper.Map<NotificacaoIncidente, NotificacaoIncidenteViewModel>
                 (_notificacaoIncidenteService.GetById(id));
             return View(result);
         }

@@ -8,7 +8,7 @@ namespace AspNET.MVC.Mappings
     {
         public DomainToViewModelMappingProfile()
         {
-            CreateMap<NotificacaoIncidente, NotificacaoIncidenteListViewModel>()
+            CreateMap<NotificacaoIncidente, NotificacaoIncidenteViewModel>()
                 .ForMember(viewModel => viewModel.NomeSetor,
                     bind => bind.MapFrom(model => model.Setores.Nome))
                         .ReverseMap()
