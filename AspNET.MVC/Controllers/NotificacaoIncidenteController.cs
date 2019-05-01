@@ -5,18 +5,27 @@ using Domain.Interfaces.Services;
 using Domain.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace AspNET.MVC.Controllers
 {
     public class NotificacaoIncidenteController : Controller
     {
         private readonly INotificacaoIncidenteService _notificacaoIncidenteService;
+        private readonly ISetorService _setorService;
         private readonly IMapper _mapper;
 
-        public NotificacaoIncidenteController(INotificacaoIncidenteService notificacaoIncidenteService, IMapper mapper)
+        public NotificacaoIncidenteController(
+            INotificacaoIncidenteService notificacaoIncidenteService,
+            ISetorService setorService,
+            IMapper mapper)
         {
             _notificacaoIncidenteService = notificacaoIncidenteService;
+            _setorService = setorService;
             _mapper = mapper;
         }
 
@@ -39,6 +48,7 @@ namespace AspNET.MVC.Controllers
         // GET: NotificacaoIncidente/Create
         public ActionResult Create()
         {
+            ViewBag.SetorId = new SelectList(_setorService.GetAll(), "SetorId", "Nome");
             return View();
         }
 
@@ -103,6 +113,41 @@ namespace AspNET.MVC.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult OnGetSetores()
+        {
+            //Will need to add one predefined request, handler=Countries in Url.
+            var setores = _setorService.GetAll()
+                .Select(s => new { id = s.SetorId , nome = s.Nome}).ToList();
+               
+            return Content(JsonConvert.SerializeObject(setores.Distinct()));
+        }
+
+        public ActionResult OnGetCountries()
+        {
+            //Will need to add one predefined request, handler=Countries in Url.
+            List<string> countryNames = new List<string>();
+
+            foreach (CultureInfo cul in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
+            {
+                var country = new RegionInfo(new CultureInfo(cul.Name, false).LCID);
+                countryNames.Add(country.DisplayName.ToString());
+            }
+
+            return Content(JsonConvert.SerializeObject(countryNames.Distinct()));
+        }
+
+        public JsonResult OnGetCountriesStartwith(string startWith)
+        {
+            //Will need to add one predefined request, handler=CountriesStartwith&startWith=A  
+            List<string> countryNames = new List<string>();
+            foreach (CultureInfo cul in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
+            {
+                var country = new RegionInfo(new CultureInfo(cul.Name, false).LCID);
+                countryNames.Add(country.DisplayName.ToString());
+            }
+            return new JsonResult(countryNames.Distinct().Where(o => o.StartsWith(startWith)));
         }
     }
 }

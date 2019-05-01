@@ -7,6 +7,7 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -71,5 +72,22 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    <script src="~/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getSetores();
+        });
+
+        function getSetores() {
+            $.post("/notificacaoincidente/OnGetSetores", null, function (data) {
+                if (data) {
+                    $(".select2").append("<option value=0> Select algo...</option>");
+                    $(data).each(function () {
+                        $(".select2").append($('<option/>', { value: this.id }).html(this.nome));
+                    });
+                }
+            }, 'json')
+        }
+    </script>
 </body>
 </html>

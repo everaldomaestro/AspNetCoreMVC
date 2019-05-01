@@ -1,0 +1,49 @@
+﻿@model AspNET.MVC.ViewModels.NotificacaoIncidenteViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>NotificacaoIncidenteViewModel</h4>
+<hr />
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="NotificacaoIncidenteId" class="control-label"></label>
+        <input asp-for="NotificacaoIncidenteId" class="form-control" />
+        <span asp-validation-for="NotificacaoIncidenteId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descricao" class="control-label"></label>
+        <input asp-for="Descricao" class="form-control" />
+        <span asp-validation-for="Descricao" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SetorId" class="control-label"></label>
+        <select class="select2 form-control"></select>
+        <span asp-validation-for="SetorId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PacienteId" class="control-label"></label>
+        <input asp-for="PacienteId" class="form-control" />
+        <span asp-validation-for="PacienteId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NomePaciente" class="control-label"></label>
+        <input asp-for="NomePaciente" class="form-control" />
+        <span asp-validation-for="NomePaciente" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
