@@ -17,15 +17,18 @@ namespace AspNET.MVC.Controllers
     {
         private readonly INotificacaoIncidenteService _notificacaoIncidenteService;
         private readonly ISetorService _setorService;
+        private readonly IPacienteService _pacienteService;
         private readonly IMapper _mapper;
 
         public NotificacaoIncidenteController(
             INotificacaoIncidenteService notificacaoIncidenteService,
             ISetorService setorService,
+            IPacienteService pacienteService,
             IMapper mapper)
         {
             _notificacaoIncidenteService = notificacaoIncidenteService;
             _setorService = setorService;
+            _pacienteService = pacienteService;
             _mapper = mapper;
         }
 
@@ -48,7 +51,7 @@ namespace AspNET.MVC.Controllers
         // GET: NotificacaoIncidente/Create
         public ActionResult Create()
         {
-            ViewBag.SetorId = new SelectList(_setorService.GetAll(), "SetorId", "Nome");
+            //ViewBag.SetorId = new SelectList(_setorService.GetAll(), "SetorId", "Nome");
             return View();
         }
 
@@ -117,37 +120,34 @@ namespace AspNET.MVC.Controllers
 
         public ActionResult OnGetSetores()
         {
-            //Will need to add one predefined request, handler=Countries in Url.
             var setores = _setorService.GetAll()
                 .Select(s => new { id = s.SetorId , nome = s.Nome}).ToList();
                
             return Content(JsonConvert.SerializeObject(setores.Distinct()));
         }
 
-        public ActionResult OnGetCountries()
+        public ActionResult OnGetNomeSetores(string nome)
         {
-            //Will need to add one predefined request, handler=Countries in Url.
-            List<string> countryNames = new List<string>();
+            var setores = _setorService.GetByNome(nome)
+                .Select(s => new { id = s.SetorId, nome = s.Nome }).ToList();
 
-            foreach (CultureInfo cul in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
-            {
-                var country = new RegionInfo(new CultureInfo(cul.Name, false).LCID);
-                countryNames.Add(country.DisplayName.ToString());
-            }
-
-            return Content(JsonConvert.SerializeObject(countryNames.Distinct()));
+            return Content(JsonConvert.SerializeObject(setores.Distinct()));
         }
 
-        public JsonResult OnGetCountriesStartwith(string startWith)
+        public ActionResult OnGetPacientes()
         {
-            //Will need to add one predefined request, handler=CountriesStartwith&startWith=A  
-            List<string> countryNames = new List<string>();
-            foreach (CultureInfo cul in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
-            {
-                var country = new RegionInfo(new CultureInfo(cul.Name, false).LCID);
-                countryNames.Add(country.DisplayName.ToString());
-            }
-            return new JsonResult(countryNames.Distinct().Where(o => o.StartsWith(startWith)));
+            var pacientes = _pacienteService.GetAll()
+                .Select(p => new { id = p.PacienteId, nome = p.Nome }).ToList();
+
+            return Content(JsonConvert.SerializeObject(pacientes.Distinct()));
+        }
+
+        public ActionResult OnGetNomePacientes(string nome)
+        {
+            var pacientes = _pacienteService.GetByNome(nome)
+                .Select(p => new { id = p.PacienteId, nome = p.Nome }).ToList();
+
+            return Content(JsonConvert.SerializeObject(pacientes.Distinct()));
         }
     }
 }

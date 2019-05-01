@@ -6,8 +6,8 @@
     <title>@ViewData["Title"] - AspNET.MVC</title>
 
     <environment include="Development">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -54,6 +54,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6/js/select2.min.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
@@ -69,25 +70,56 @@
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     </environment>
 
     @RenderSection("Scripts", required: false)
-    <script src="~/js/select2.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            getSetores();
-        });
-
-        function getSetores() {
-            $.post("/notificacaoincidente/OnGetSetores", null, function (data) {
+            $.post("/notificacaoincidente/OnGetPacientes", null, function (data) {
                 if (data) {
-                    $(".select2").append("<option value=0> Select algo...</option>");
                     $(data).each(function () {
-                        $(".select2").append($('<option/>', { value: this.id }).html(this.nome));
+                        $("#pacientes").append($('<option/>', { value: this.id }).html(this.nome));
                     });
                 }
             }, 'json')
-        }
+        });
+
+        $('#selectSetor').click(function () {
+            //open bootsrap modal
+            $('#myModal').modal({
+                show: true
+            });
+        });
+
+        $('#submit').click(function () {
+            var value = $('#searchSetor').val().toUpperCase();
+
+            $("#setores").empty();
+
+            $.post("/notificacaoincidente/OnGetNomeSetores?nome=" + value, null, function (data) {
+                if (data) {
+                    $(data).each(function () {
+                        $("#setores").append($('<option/>', { value: this.id }).html(this.nome));
+                    });
+                }
+            }, 'json')
+        });
+
+        //$('#descricao').keyup(function () {
+        //    delay(function () {
+        //        getSetores()
+        //    }, 1000);
+        //});
+
+        //var delay = (function () {
+        //    var timer = 0;
+        //    return function (callback, ms) {
+        //        clearTimeout(timer);
+        //        timer = setTimeout(callback, ms);
+        //    };
+        //})();
+
     </script>
 </body>
 </html>
