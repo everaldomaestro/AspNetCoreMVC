@@ -17,6 +17,7 @@ namespace Infra.Repositories
 
         public void Add(Entity entity)
         {
+            Db.Entry(entity).State = EntityState.Added;
             Db.Set<Entity>().Add(entity);
             Db.SaveChanges();
         }

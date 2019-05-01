@@ -8,7 +8,8 @@ namespace AspNET.MVC.Mappings
     {
         public ViewModelToDomainMappingProfile()
         {
-            CreateMap<NotificacaoIncidenteViewModel, NotificacaoIncidente>();
+            CreateMap<NotificacaoIncidenteViewModel, NotificacaoIncidente>()
+                .ForMember(model=> model.NotificacaoIncidenteId, bind=> bind.Ignore());
         }
     }
 }

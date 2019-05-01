@@ -58,18 +58,19 @@ namespace AspNET.MVC.Controllers
         // POST: NotificacaoIncidente/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(NotificacaoIncidenteViewModel notificacaoIncidente)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            notificacaoIncidente.NomePaciente = _pacienteService.GetById(notificacaoIncidente.PacienteId).Nome;
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                var _notificacaoIncidente = _mapper.Map<NotificacaoIncidenteViewModel, NotificacaoIncidente>(notificacaoIncidente);
+                _notificacaoIncidenteService.Add(_notificacaoIncidente);
+
+                return RedirectToAction("Index");
             }
+
+            return View(notificacaoIncidente);
         }
 
         // GET: NotificacaoIncidente/Edit/5

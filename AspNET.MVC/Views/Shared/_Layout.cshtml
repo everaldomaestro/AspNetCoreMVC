@@ -76,6 +76,14 @@
     @RenderSection("Scripts", required: false)
     <script type="text/javascript">
         $(document).ready(function () {
+            $.post("/notificacaoincidente/OnGetSetores", null, function (data) {
+                if (data) {
+                    $(data).each(function () {
+                        $("#setores").append($('<option/>', { value: this.id }).html(this.nome));
+                    });
+                }
+            }, 'json')
+
             $.post("/notificacaoincidente/OnGetPacientes", null, function (data) {
                 if (data) {
                     $(data).each(function () {
@@ -85,26 +93,31 @@
             }, 'json')
         });
 
-        $('#selectSetor').click(function () {
-            //open bootsrap modal
-            $('#myModal').modal({
-                show: true
-            });
-        });
+        //$('#selectSetor').click(function () {
+        //    //open bootsrap modal
+        //    $('#myModal').modal({
+        //        show: true
+        //    });
+        //});
 
-        $('#submit').click(function () {
-            var value = $('#searchSetor').val().toUpperCase();
+        //$('#submit').click(function () {
+        //    var value = $('#searchSetor').val().toUpperCase();
 
-            $("#setores").empty();
+        //    $("#setores").empty();
 
-            $.post("/notificacaoincidente/OnGetNomeSetores?nome=" + value, null, function (data) {
-                if (data) {
-                    $(data).each(function () {
-                        $("#setores").append($('<option/>', { value: this.id }).html(this.nome));
-                    });
-                }
-            }, 'json')
-        });
+        //    $.post("/notificacaoincidente/OnGetNomeSetores?nome=" + value, null, function (data) {
+        //        if (data) {
+        //            $(data).each(function () {
+        //                $("#setores").append($('<option/>', { value: this.id }).html(this.nome));
+        //            });
+        //        }
+        //    }, 'json')
+        //});
+
+        //$('#teste').click(function () {
+        //    document.getElementById("nomeSetor").value = document.getElementById("setores").;
+        //    document.getElementById("nomePaciente").value = document.getElementById("pacientes").value;
+        //});
 
         //$('#descricao').keyup(function () {
         //    delay(function () {

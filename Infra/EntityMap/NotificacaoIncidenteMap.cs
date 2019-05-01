@@ -17,8 +17,6 @@ namespace Infra.EntityMap
             builder.Property(x => x.SetorId).HasColumnName("SetorId");
             builder.Property(x => x.PacienteId).HasColumnName("PacienteId");
             builder.Property(x => x.NomePaciente).HasColumnName("NomePaciente");
-
-           
         }
     }
 }
